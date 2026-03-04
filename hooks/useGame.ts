@@ -68,7 +68,9 @@ export function useGame(): UseGameReturn {
   const [moveHistory, setMoveHistory] = useState<Move[]>([]);
   const [difficulty, setDifficultyState] = useState<Difficulty>("medium");
   const [timer, setTimer] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
+  
+  // Derive isComplete from board state using useMemo
+  const isComplete = useMemo(() => isBoardComplete(board), [board]);
 
   // Start new game function
   const newGame = useCallback((diff?: Difficulty) => {
@@ -83,7 +85,6 @@ export function useGame(): UseGameReturn {
     setSelectedCell(null);
     setMoveHistory([]);
     setTimer(0);
-    setIsComplete(false);
     if (diff) {
       setDifficultyState(diff);
     }
@@ -100,15 +101,7 @@ export function useGame(): UseGameReturn {
     return () => clearInterval(interval);
   }, [isComplete]);
 
-  // Check for game completion using useMemo instead of setState in effect
-  const gameIsComplete = useMemo(() => {
-    return isBoardComplete(board);
-  }, [board]);
 
-  // Update isComplete when gameIsComplete changes
-  useEffect(() => {
-    setIsComplete(gameIsComplete);
-  }, [gameIsComplete]);
 
   // Calculate number counts
   const numberCounts = useMemo(() => {
@@ -227,9 +220,8 @@ export function useGame(): UseGameReturn {
   // Count moves
   const moves = moveHistory.length;
 
-  // Set difficulty wrapper
+  // Set difficulty wrapper - newGame already handles difficulty state update
   const setDifficulty = useCallback((diff: Difficulty) => {
-    setDifficultyState(diff);
     newGame(diff);
   }, [newGame]);
 
