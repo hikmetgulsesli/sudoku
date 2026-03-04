@@ -1,4 +1,5 @@
 // Sudoku game types
+// Difficulty type is defined in lib/sudoku.ts - import from there for consistency
 
 export interface CellData {
   value: number | null;
@@ -7,18 +8,16 @@ export interface CellData {
   isHighlighted?: boolean;
 }
 
-export type Difficulty = 'easy' | 'medium' | 'hard';
-
 export interface GameState {
   grid: CellData[];
-  difficulty: Difficulty;
+  difficulty: import('../lib/sudoku').Difficulty;
   timer: number;
   isComplete: boolean;
   moves: number;
 }
 
 export interface SudokuPuzzle {
-  puzzle: number[];
-  solution: number[];
-  difficulty: Difficulty;
+  puzzle: number[][];
+  solution: number[][];
+  difficulty: import('../lib/sudoku').Difficulty;
 }

@@ -7,7 +7,7 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
 export interface Puzzle {
   initial: number[][];
   solution: number[][];
-  difficulty: string;
+  difficulty: Difficulty;
 }
 
 // Difficulty levels with clue counts
