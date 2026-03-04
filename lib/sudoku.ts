@@ -19,7 +19,7 @@ const DIFFICULTY_CLUES: Record<Difficulty, { min: number; max: number }> = {
 };
 
 /**
- * Check if placing a number at a position is valid according to Sudoku rules
+ * Check if placing a number at a position is valid according to Sudoku rules (number[][] version)
  */
 export function isValidMove(
   board: number[][],
@@ -417,4 +417,17 @@ export function numbersToBoard(puzzle: number[][]): Cell[][] {
  */
 export function createBoard(puzzle: number[][]): Cell[][] {
   return numbersToBoard(puzzle);
+}
+
+/**
+ * Check if placing a number at a position is valid according to Sudoku rules (Board type version)
+ */
+export function isValidMoveOnBoard(
+  board: Cell[][],
+  row: number,
+  col: number,
+  num: number | null
+): boolean {
+  if (num === null) return true;
+  return isValidCellValue(board, row, col, num);
 }

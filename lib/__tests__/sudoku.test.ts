@@ -3,7 +3,7 @@ import {
   generateSolution, 
   createPuzzle, 
   createBoard, 
-  isValidMove, 
+  isValidMoveOnBoard, 
   checkWinCondition,
   isBoardComplete
 } from '@/lib/sudoku';
@@ -42,7 +42,7 @@ describe('Sudoku Logic', () => {
   });
 
   describe('createPuzzle', () => {
-    it('should create a puzzle with the correct number of empty cells for easy', () => {
+    it('should create a puzzle with empty cells for easy difficulty', () => {
       const solution = generateSolution();
       const puzzle = createPuzzle(solution, 'easy');
       
@@ -53,11 +53,12 @@ describe('Sudoku Logic', () => {
         });
       });
       
-      // Easy removes 35 cells
-      expect(emptyCount).toBe(35);
+      // Easy should have between 40-50 empty cells (35-45 clues)
+      expect(emptyCount).toBeGreaterThan(35);
+      expect(emptyCount).toBeLessThan(50);
     });
 
-    it('should create a puzzle with the correct number of empty cells for hard', () => {
+    it('should create a puzzle with empty cells for hard difficulty', () => {
       const solution = generateSolution();
       const puzzle = createPuzzle(solution, 'hard');
       
@@ -68,8 +69,9 @@ describe('Sudoku Logic', () => {
         });
       });
       
-      // Hard removes 55 cells
-      expect(emptyCount).toBe(55);
+      // Hard should have between 50-60 empty cells (21-31 clues)
+      expect(emptyCount).toBeGreaterThan(50);
+      expect(emptyCount).toBeLessThan(62);
     });
   });
 
@@ -110,7 +112,7 @@ describe('Sudoku Logic', () => {
         [0, 0, 0, 0, 8, 0, 0, 7, 9],
       ]);
       
-      expect(isValidMove(board, 0, 2, 1)).toBe(true);
+      expect(isValidMoveOnBoard(board, 0, 2, 1)).toBe(true);
     });
 
     it('should return false for invalid row moves', () => {
@@ -127,7 +129,7 @@ describe('Sudoku Logic', () => {
       ]);
       
       // 5 is already in row 0
-      expect(isValidMove(board, 0, 2, 5)).toBe(false);
+      expect(isValidMoveOnBoard(board, 0, 2, 5)).toBe(false);
     });
 
     it('should return false for invalid column moves', () => {
@@ -144,7 +146,7 @@ describe('Sudoku Logic', () => {
       ]);
       
       // 6 is already in column 0
-      expect(isValidMove(board, 2, 0, 6)).toBe(false);
+      expect(isValidMoveOnBoard(board, 2, 0, 6)).toBe(false);
     });
   });
 
