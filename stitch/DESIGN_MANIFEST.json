@@ -1,0 +1,44 @@
+{
+  "project": "sudoku",
+  "stitchProjectId": "6065217434078723600",
+  "deviceType": "DESKTOP",
+  "designSystem": {
+    "aesthetic": "minimal",
+    "palette": "SaaS / Productivity (blue-based for clean puzzle aesthetic)",
+    "headingFont": "Space Grotesk",
+    "bodyFont": "DM Sans",
+    "iconLibrary": "Lucide React"
+  },
+  "screens": [
+    {
+      "id": "main-game",
+      "title": "Main Game Screen",
+      "file": "stitch/main-game.html",
+      "screenshot": "stitch/main-game.png",
+      "description": "Primary Sudoku gameplay interface with 9x9 grid, number pad, and game controls"
+    },
+    {
+      "id": "difficulty-select",
+      "title": "Difficulty Selection",
+      "file": "stitch/difficulty-select.html",
+      "screenshot": "stitch/difficulty-select.png",
+      "description": "Difficulty selection screen with Easy, Medium, Hard options"
+    },
+    {
+      "id": "victory",
+      "title": "Victory Screen",
+      "file": "stitch/victory.html",
+      "screenshot": "stitch/victory.png",
+      "description": "Puzzle completion celebration with stats and replay options"
+    },
+    {
+      "id": "pause-menu",
+      "title": "Pause Menu",
+      "file": "stitch/pause-menu.html",
+      "screenshot": "stitch/pause-menu.png",
+      "description": "Game pause overlay with resume, restart, and settings"
+    }
+  ],
+  "screensGenerated": 4,
+  "generatedAt": "2026-03-04T15:29:00Z"
+}

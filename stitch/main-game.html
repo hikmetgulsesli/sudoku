@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudoku - Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #3b82f6;
+      --color-primary-dark: #2563eb;
+      --color-bg: #f8fafc;
+      --color-surface: #ffffff;
+      --color-text: #1e293b;
+      --color-text-muted: #64748b;
+      --color-border: #e2e8f0;
+      --color-grid: #334155;
+      --color-user-input: #3b82f6;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+    .header-center {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .timer {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text);
+      background: var(--color-bg);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .difficulty-badge {
+      background: var(--color-primary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-icon:hover {
+      background: var(--color-bg);
+      border-color: var(--color-primary);
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      padding: 32px;
+      gap: 32px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .game-board {
+      background: var(--color-surface);
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(9, 52px);
+      grid-template-rows: repeat(9, 52px);
+      gap: 0;
+      border: 2px solid var(--color-grid);
+    }
+    .cell {
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .cell:hover { background: #f1f5f9; }
+    .cell.selected { background: #dbeafe; }
+    .cell.fixed { color: var(--color-text); }
+    .cell.user-input { color: var(--color-user-input); }
+    .cell:nth-child(3n):not(:nth-child(9n)) { border-right: 2px solid var(--color-grid); }
+    .cell:nth-child(n+19):nth-child(-n+27),
+    .cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--color-grid); }
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .number-pad {
+      background: var(--color-surface);
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .pad-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 8px;
+    }
+    .pad-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pad-btn:hover {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+    .actions-card {
+      background: var(--color-surface);
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .btn {
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: var(--color-primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--color-primary-dark); }
+    .btn-secondary {
+      background: var(--color-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+    .btn-secondary:hover { background: var(--color-border); }
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--color-bg);
+      border-radius: 10px;
+      font-size: 13px;
+    }
+    .stat-label { color: var(--color-text-muted); }
+    .stat-value { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">◆ Sudoku</div>
+    <div class="header-center">
+      <span class="difficulty-badge">Medium</span>
+      <div class="timer">⏱ 12:45</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon">⚙</button>
+      <button class="btn-icon">⏸</button>
+    </div>
+  </header>
+  <main class="main">
+    <div class="game-board">
+      <div class="grid">
+        <div class="cell fixed">5</div><div class="cell fixed">3</div><div class="cell"></div><div class="cell"></div><div class="cell fixed">7</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell fixed">6</div><div class="cell"></div><div class="cell"></div><div class="cell fixed">1</div><div class="cell fixed">9</div><div class="cell fixed">5</div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell fixed">9</div><div class="cell fixed">8</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">6</div><div class="cell"></div>
+        <div class="cell fixed">8</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">6</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">3</div>
+        <div class="cell fixed">4</div><div class="cell"></div><div class="cell"></div><div class="cell fixed">8</div><div class="cell"></div><div class="cell fixed">3</div><div class="cell"></div><div class="cell"></div><div class="cell fixed">1</div>
+        <div class="cell fixed">7</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">2</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">6</div>
+        <div class="cell"></div><div class="cell fixed">6</div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">2</div><div class="cell fixed">8</div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">4</div><div class="cell fixed">1</div><div class="cell fixed">9</div><div class="cell"></div><div class="cell"></div><div class="cell fixed">5</div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell fixed">8</div><div class="cell"></div><div class="cell"></div><div class="cell fixed">7</div><div class="cell fixed">9</div>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <div class="number-pad">
+        <div class="pad-title">Number Pad</div>
+        <div class="pad-grid">
+          <button class="pad-btn">1</button><button class="pad-btn">2</button><button class="pad-btn">3</button>
+          <button class="pad-btn">4</button><button class="pad-btn">5</button><button class="pad-btn">6</button>
+          <button class="pad-btn">7</button><button class="pad-btn">8</button><button class="pad-btn">9</button>
+        </div>
+      </div>
+      <div class="actions-card">
+        <button class="btn btn-primary">💡 Hint (3)</button>
+        <button class="btn btn-secondary">↺ Undo</button>
+        <button class="btn btn-secondary">🗑 Clear Cell</button>
+        <button class="btn btn-secondary">🔄 New Game</button>
+      </div>
+      <div class="stats-row">
+        <span><span class="stat-label">Hints:</span> <span class="stat-value">3/3</span></span>
+        <span><span class="stat-label">Moves:</span> <span class="stat-value">12</span></span>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>
