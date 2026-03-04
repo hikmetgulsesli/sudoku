@@ -18,7 +18,7 @@ export interface GameState {
 }
 
 export interface SudokuPuzzle {
-  puzzle: number[];
-  solution: number[];
+  puzzle: number[][];
+  solution: number[][];
   difficulty: Difficulty;
 }
