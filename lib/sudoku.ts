@@ -348,3 +348,73 @@ export function boardToGrid(board: Board): number[][] {
     row.map(cell => cell.value ?? 0)
   );
 }
+
+/**
+ * Generate a complete puzzle (alias for generateFullPuzzle)
+ */
+export function generateFullPuzzleAlias(difficulty: Difficulty): Puzzle {
+  return generateFullPuzzle(difficulty);
+}
+
+// ============================================================================
+// Additional helper functions
+// ============================================================================
+
+/**
+ * Generate a complete valid Sudoku solution
+ * Alias for generateSolvedBoard for consistency
+ */
+export function generateSolution(): number[][] {
+  return generateSolvedBoard();
+}
+
+/**
+ * Create a puzzle by removing numbers from a solution
+ * New version that takes difficulty directly
+ */
+export function createPuzzleFromSolution(solution: number[][], difficulty: Difficulty): number[][] {
+  return createPuzzle(solution, difficulty);
+}
+
+/**
+ * Check if the puzzle is complete and correct
+ * Compares board values against solution
+ */
+export function checkWinCondition(board: Cell[][], solution: number[][]): boolean {
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      if (board[row][col].value !== solution[row][col]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * Convert a puzzle (number[][]) to a Board with fixed cells marked
+ */
+export function puzzleToBoard(puzzle: number[][]): Cell[][] {
+  return numbersToBoard(puzzle);
+}
+
+/**
+ * Convert number grid to Board type
+ */
+export function numbersToBoard(puzzle: number[][]): Cell[][] {
+  return puzzle.map(row =>
+    row.map(value => ({
+      value: value === 0 ? null : value,
+      isFixed: value !== 0,
+      isValid: true,
+      notes: [],
+    }))
+  );
+}
+
+/**
+ * Alias for numbersToBoard
+ */
+export function createBoard(puzzle: number[][]): Cell[][] {
+  return numbersToBoard(puzzle);
+}
