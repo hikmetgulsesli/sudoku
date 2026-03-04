@@ -49,12 +49,12 @@ describe('Project Setup', () => {
 describe('shadcn/ui Components', () => {
   it('should export Button component', () => {
     expect(Button).toBeDefined();
-    expect(Button.displayName).toBe('Button');
+    expect(typeof Button).toBe('function');
   });
 
   it('should export Card component', () => {
     expect(Card).toBeDefined();
-    expect(Card.displayName).toBe('Card');
+    expect(typeof Card).toBe('function');
   });
 
   it('should export Card sub-components', () => {

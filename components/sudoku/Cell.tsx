@@ -1,70 +1,98 @@
-'use client';
-
-import { cn } from '@/lib/utils';
-import { Cell as CellType } from '@/types/sudoku';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface CellProps {
-  cell: CellType;
+  value: number | null;
+  isFixed: boolean;
+  isSelected: boolean;
+  isHighlighted: boolean;
+  isValid: boolean;
   row: number;
   col: number;
-  isSelected: boolean;
-  onClick: () => void;
-  onNumberInput: (num: number) => void;
-  isPaused: boolean;
+  onClick: (row: number, col: number) => void;
+  notes?: number[];
+  className?: string;
 }
 
-export function Cell({ cell, row, col, isSelected, onClick, onNumberInput, isPaused }: CellProps) {
-  const handleClick = () => {
-    if (!isPaused) {
-      onClick();
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (isPaused) return;
-    
-    const key = e.key;
-    if (key >= '1' && key <= '9') {
-      e.preventDefault();
-      onNumberInput(parseInt(key, 10));
-    } else if (key === 'Backspace' || key === 'Delete') {
-      e.preventDefault();
-      onNumberInput(0);
-    }
-  };
-
-  // Determine border classes
-  const isThickRight = col === 2 || col === 5;
-  const isThickBottom = row === 2 || row === 5;
+export function Cell({
+  value,
+  isFixed,
+  isSelected,
+  isHighlighted,
+  isValid,
+  row,
+  col,
+  onClick,
+  notes = [],
+  className,
+}: CellProps) {
+  const isThickRightBorder = (col + 1) % 3 === 0 && col !== 8;
+  const isThickBottomBorder = (row + 1) % 3 === 0 && row !== 8;
 
   return (
     <button
-      data-cell-row={row}
-      data-cell-col={col}
-      data-cell-value={cell.value}
-      data-cell-fixed={cell.isFixed}
-      data-cell-selected={isSelected}
+      onClick={() => onClick(row, col)}
       className={cn(
-        'w-full aspect-square flex items-center justify-center text-xl font-semibold transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-blue-400',
-        'border-r border-b border-slate-600',
-        isThickRight && 'border-r-2 border-r-slate-800',
-        isThickBottom && 'border-b-2 border-b-slate-800',
-        col === 8 && 'border-r-0',
-        row === 8 && 'border-b-0',
-        isSelected && !isPaused && 'bg-blue-100 dark:bg-blue-900/30',
-        !isSelected && !isPaused && 'hover:bg-slate-100 dark:hover:bg-slate-800/50',
-        isPaused && 'cursor-default',
-        !isPaused && 'cursor-pointer',
-        cell.isFixed && 'text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/30',
-        !cell.isFixed && cell.value && 'text-blue-600 dark:text-blue-400',
-        !cell.isValid && 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20'
+        "relative flex items-center justify-center",
+        "w-full aspect-square",
+        "font-heading font-semibold",
+        "text-base sm:text-lg md:text-xl lg:text-2xl",
+        "border border-border",
+        "transition-all duration-150 ease-out",
+        "focus-visible:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+        "motion-reduce:transition-none",
+        {
+          "cursor-pointer hover:bg-muted/50": !isFixed,
+          "cursor-default": isFixed,
+          "bg-card": !isSelected && !isHighlighted,
+          "bg-primary/10": isHighlighted && !isSelected,
+          "bg-primary/20": isSelected,
+          "ring-2 ring-primary ring-inset z-10": isSelected,
+          "text-foreground": isFixed,
+          "text-primary": !isFixed && value !== null,
+          "text-destructive": !isValid && value !== null,
+          "border-r-2 border-r-foreground/20": isThickRightBorder,
+          "border-b-2 border-b-foreground/20": isThickBottomBorder,
+        },
+        className
       )}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      disabled={cell.isFixed || isPaused}
-      tabIndex={isPaused ? -1 : 0}
+      data-row={row}
+      data-col={col}
+      data-fixed={isFixed}
+      data-selected={isSelected}
+      aria-label={
+        value !== null
+          ? `Cell ${row + 1},${col + 1}: ${value}`
+          : `Empty cell ${row + 1},${col + 1}`
+      }
+      data-selected-state={isSelected}
     >
-      {cell.value || ''}
+      {value !== null ? (
+        <span
+          className={cn(
+            "motion-safe:animate-in motion-safe:zoom-in-50 motion-safe:duration-150",
+            "motion-reduce:animate-none"
+          )}
+        >
+          {value}
+        </span>
+      ) : notes.length > 0 ? (
+        <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 p-0.5 sm:p-1">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+            <span
+              key={n}
+              className={cn(
+                "flex items-center justify-center",
+                "text-[8px] sm:text-[10px] md:text-xs",
+                "font-normal text-muted-foreground",
+                notes.includes(n) ? "opacity-100" : "opacity-0"
+              )}
+            >
+              {notes.includes(n) ? n : ""}
+            </span>
+          ))}
+        </div>
+      ) : null}
     </button>
   );
 }
