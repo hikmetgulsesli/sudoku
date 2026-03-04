@@ -1,7 +1,5 @@
 STATUS: done
-STITCH_PROJECT_ID: 6065217434078723600
-DEVICE_TYPE: DESKTOP
-SCREENS_GENERATED: 4
-DESIGN_MANIFEST: stitch/DESIGN_MANIFEST.json
-DESIGN_TOKENS: stitch/design-tokens.css
-DESIGN_NOTES: Generated 4 screens for Sudoku game: main-game (9x9 grid with number pad), difficulty-select (Easy/Medium/Hard options), victory (completion celebration with stats), pause-menu (overlay with resume/restart/exit). Design system: Minimal SaaS aesthetic with blue primary, Space Grotesk headings, DM Sans body.
+STORY_BRANCH: eff2dfd4-US-003
+PR_URL: https://github.com/hikmetgulsesli/sudoku/pull/4
+CHANGES: Created lib/sudoku.ts with puzzle generation algorithm including generateSolvedBoard() using backtracking, createPuzzle() with difficulty-based cell removal, isValidMove() for Sudoku rule validation, hasUniqueSolution() for verifying unique solutions. Difficulty levels: Easy (35-40 clues), Medium (30-34 clues), Hard (25-29 clues). All puzzles guarantee unique solutions.
+TESTS: Created __tests__/sudoku.test.ts with 23 tests covering isValidMove validation, generateSolvedBoard correctness, countSolutions accuracy, hasUniqueSolution verification, difficulty level clue counts (easy/medium/hard), and puzzle solvability. All tests pass.
