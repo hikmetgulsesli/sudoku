@@ -3,45 +3,40 @@ import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import * as fs from 'fs';
 
+// Read package.json once for all tests
+const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+
 describe('Project Setup', () => {
   it('should have Next.js configured', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.dependencies).toHaveProperty('next');
   });
 
   it('should have React configured', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.dependencies).toHaveProperty('react');
   });
 
   it('should have Tailwind CSS configured', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.devDependencies).toHaveProperty('tailwindcss');
   });
 
   it('should have typecheck script', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.scripts).toHaveProperty('typecheck');
     expect(packageJson.scripts.typecheck).toBe('tsc --noEmit');
   });
 
   it('should have dev script', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.scripts).toHaveProperty('dev');
   });
 
   it('should have build script', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.scripts).toHaveProperty('build');
   });
 
   it('should have test script', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.scripts).toHaveProperty('test');
   });
 
   it('should have lint script', () => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     expect(packageJson.scripts).toHaveProperty('lint');
   });
 });
