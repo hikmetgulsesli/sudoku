@@ -291,6 +291,12 @@ export interface Move {
   col: number;
   previousValue: number | null;
   newValue: number | null;
+  timestamp?: number;
+}
+
+export interface SelectedCell {
+  row: number;
+  col: number;
 }
 
 /**
@@ -373,7 +379,8 @@ export function generateSolution(): number[][] {
  * New version that takes difficulty directly
  */
 export function createPuzzleFromSolution(solution: number[][], difficulty: Difficulty): number[][] {
-  return createPuzzle(solution, difficulty);
+  const { puzzle } = createPuzzle(solution, difficulty);
+  return puzzle;
 }
 
 /**
@@ -430,4 +437,57 @@ export function isValidMoveOnBoard(
 ): boolean {
   if (num === null) return true;
   return isValidCellValue(board, row, col, num);
+}
+
+/**
+ * Check if a cell value is valid according to Sudoku rules
+ */
+function isValidCellValue(
+  board: Cell[][],
+  row: number,
+  col: number,
+  num: number
+): boolean {
+  // Check row
+  for (let c = 0; c < 9; c++) {
+    if (c !== col && board[row][c].value === num) {
+      return false;
+    }
+  }
+
+  // Check column
+  for (let r = 0; r < 9; r++) {
+    if (r !== row && board[r][col].value === num) {
+      return false;
+    }
+  }
+
+  // Check 3x3 box
+  const boxRow = Math.floor(row / 3) * 3;
+  const boxCol = Math.floor(col / 3) * 3;
+  for (let r = boxRow; r < boxRow + 3; r++) {
+    for (let c = boxCol; c < boxCol + 3; c++) {
+      if ((r !== row || c !== col) && board[r][c].value === num) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Validate a Board and set isValid flags on each cell
+ * Returns a new Board with proper validation flags
+ */
+export function validateBoardCells(board: Board): Board {
+  return board.map((row, rowIndex) =>
+    row.map((cell, colIndex) => {
+      if (cell.value === null) {
+        return { ...cell, isValid: true };
+      }
+      const isValid = isValidCellValue(board, rowIndex, colIndex, cell.value);
+      return { ...cell, isValid };
+    })
+  );
 }

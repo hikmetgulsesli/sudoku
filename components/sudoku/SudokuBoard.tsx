@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Board, Difficulty } from '@/types/sudoku';
 import { Cell } from './Cell';
-import { generateSolution, createPuzzle, createBoard, validateBoard, checkWinCondition, isBoardComplete } from '@/lib/sudoku';
+import { generateSolution, createPuzzle, createBoard, validateBoardCells, checkWinCondition, isBoardComplete } from '@/lib/sudoku';
 import { useTimer } from '@/hooks/useTimer';
 import { useGamePersistence } from '@/hooks/useGamePersistence';
 import { GameControls } from './GameControls';
@@ -34,7 +34,7 @@ export function SudokuBoard({ initialDifficulty = 'medium' }: SudokuBoardProps) 
   // Function to start a new game
   const startNewGame = useCallback((diff: Difficulty) => {
     const newSolution = generateSolution();
-    const puzzle = createPuzzle(newSolution, diff);
+    const { puzzle } = createPuzzle(newSolution, diff);
     const newBoard = createBoard(puzzle);
     
     setSolution(newSolution);
@@ -69,7 +69,7 @@ export function SudokuBoard({ initialDifficulty = 'medium' }: SudokuBoardProps) 
     } else {
       // Start new game
       const newSolution = generateSolution();
-      const puzzle = createPuzzle(newSolution, initialDifficulty);
+      const { puzzle } = createPuzzle(newSolution, initialDifficulty);
       const newBoard = createBoard(puzzle);
       setSolution(newSolution);
       setBoard(newBoard);
@@ -138,7 +138,7 @@ export function SudokuBoard({ initialDifficulty = 'medium' }: SudokuBoardProps) 
           return c;
         })
       );
-      return validateBoard(newBoard);
+      return validateBoardCells(newBoard);
     });
   }, [selectedCell, board, hasStarted, start, gameStatus]);
 

@@ -44,7 +44,7 @@ describe('Sudoku Logic', () => {
   describe('createPuzzle', () => {
     it('should create a puzzle with empty cells for easy difficulty', () => {
       const solution = generateSolution();
-      const puzzle = createPuzzle(solution, 'easy');
+      const { puzzle } = createPuzzle(solution, 'easy');
       
       let emptyCount = 0;
       puzzle.forEach(row => {
@@ -60,7 +60,7 @@ describe('Sudoku Logic', () => {
 
     it('should create a puzzle with empty cells for hard difficulty', () => {
       const solution = generateSolution();
-      const puzzle = createPuzzle(solution, 'hard');
+      const { puzzle } = createPuzzle(solution, 'hard');
       
       let emptyCount = 0;
       puzzle.forEach(row => {
@@ -160,7 +160,7 @@ describe('Sudoku Logic', () => {
 
     it('should return false when board does not match solution', () => {
       const solution = generateSolution();
-      const puzzle = createPuzzle(solution, 'easy');
+      const { puzzle } = createPuzzle(solution, 'easy');
       const board = createBoard(puzzle);
       
       expect(checkWinCondition(board, solution)).toBe(false);
@@ -177,7 +177,7 @@ describe('Sudoku Logic', () => {
 
     it('should return false when some cells are empty', () => {
       const solution = generateSolution();
-      const puzzle = createPuzzle(solution, 'easy');
+      const { puzzle } = createPuzzle(solution, 'easy');
       const board = createBoard(puzzle);
       
       expect(isBoardComplete(board)).toBe(false);

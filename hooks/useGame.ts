@@ -8,8 +8,8 @@ import {
   SelectedCell,
   generateFullPuzzle,
   numbersToBoard,
-  validateBoard,
-  checkComplete,
+  validateBoardCells,
+  isBoardComplete,
 } from "@/lib/sudoku";
 
 export interface UseGameReturn {
@@ -52,7 +52,7 @@ function generateInitialGame(difficulty: Difficulty) {
   const { initial } = generateFullPuzzle(difficulty);
   const newBoard = numbersToBoard(initial);
   return {
-    board: validateBoard(newBoard),
+    board: validateBoardCells(newBoard),
     initialBoard: newBoard.map((row) => row.map((cell) => ({ ...cell }))),
   };
 }
@@ -79,7 +79,7 @@ export function useGame(): UseGameReturn {
     setInitialBoard(newBoard.map((row) => 
       row.map((cell) => ({ ...cell }))
     ));
-    setBoard(validateBoard(newBoard));
+    setBoard(validateBoardCells(newBoard));
     setSelectedCell(null);
     setMoveHistory([]);
     setTimer(0);
@@ -102,7 +102,7 @@ export function useGame(): UseGameReturn {
 
   // Check for game completion using useMemo instead of setState in effect
   const gameIsComplete = useMemo(() => {
-    return checkComplete(board);
+    return isBoardComplete(board);
   }, [board]);
 
   // Update isComplete when gameIsComplete changes
@@ -189,7 +189,7 @@ export function useGame(): UseGameReturn {
           ...newBoard[row][col],
           value,
         };
-        return validateBoard(newBoard);
+        return validateBoardCells(newBoard);
       });
     },
     [selectedCell, board]
@@ -207,7 +207,7 @@ export function useGame(): UseGameReturn {
         ...newBoard[lastMove.row][lastMove.col],
         value: lastMove.previousValue,
       };
-      return validateBoard(newBoard);
+      return validateBoardCells(newBoard);
     });
 
     setMoveHistory((prev) => prev.slice(0, -1));
