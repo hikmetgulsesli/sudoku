@@ -1,8 +1,9 @@
 /**
  * Sudoku puzzle generation and validation utilities
  */
+import type { Difficulty } from '../types';
 
-export type Difficulty = 'easy' | 'medium' | 'hard';
+export type { Difficulty } from '../types';
 
 export interface Puzzle {
   initial: number[][];
